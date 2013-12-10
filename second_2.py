@@ -1,4 +1,5 @@
 import logic
+import itertools
 
 
 
@@ -10,182 +11,208 @@ KB.tell(logic.expr("At_0(C1, SFO)"))
 KB.tell(logic.expr("~At_0(C1, JFK)"))
 KB.tell(logic.expr("At_0(C2, JFK)"))
 KB.tell(logic.expr("~At_0(C2, SFO)"))
-
 KB.tell(logic.expr("At_0(P1, SFO)"))
 KB.tell(logic.expr("~At_0(P1, JFK)"))
-
 KB.tell(logic.expr("At_0(P2, JFK)"))
 KB.tell(logic.expr("~At_0(P2, SFO)"))
-
-
-
 KB.tell(logic.expr("~In_0(C1, P1)"))
 KB.tell(logic.expr("~In_0(C2, P1)"))
 KB.tell(logic.expr("~In_0(C1, P2)"))
 KB.tell(logic.expr("~In_0(C2, P2)"))
 
 
+moves = 6
 
+#first preconditions
 
-
-
-
-#first part
-KB.tell(logic.expr("~Load_0(C1, SFO, P1) | At_0(C1, SFO)"))
-KB.tell(logic.expr("~Load_0(C1, SFO, P1) | At_0(P1, SFO)"))
-KB.tell(logic.expr("~Load_0(C1, SFO, P2) | At_0(C1, SFO)"))
-KB.tell(logic.expr("~Load_0(C1, SFO, P2) | At_0(P2, SFO)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P1) | At_0(C2, JFK)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P1) | At_0(P1, JFK)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P2) | At_0(C2, JFK)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P2) | At_0(P2, JFK)"))
-
-
-# KB.tell(logic.expr("~Load_1(C1, SFO, P1) | At_1(C1, SFO)"))
-# KB.tell(logic.expr("~Load_1(C1, SFO, P1) | At_1(P1, SFO)"))
-# KB.tell(logic.expr("~Load_1(C1, SFO, P2) | At_1(C1, SFO)"))
-# KB.tell(logic.expr("~Load_1(C1, SFO, P2) | At_1(P2, SFO)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P1) | At_1(C2, JFK)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P1) | At_1(P1, JFK)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P2) | At_1(C2, JFK)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P2) | At_1(P2, JFK)"))
-
-#second part
-
-KB.tell(logic.expr("~Load_0(C1, SFO, P1) | In_1(C1, P1)"))
-KB.tell(logic.expr("~Load_0(C1, SFO, P2) | In_1(C1, P2)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P1) | In_1(C2, P1)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P2) | In_1(C2, P2)"))
-
-# KB.tell(logic.expr("~Load_1(C1, SFO, P1) | In_2(C1, P1)"))
-# KB.tell(logic.expr("~Load_1(C1, SFO, P2) | In_2(C1, P2)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P1) | In_2(C2, P1)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P2) | In_2(C2, P2)"))
-
-#third part
-
-KB.tell(logic.expr("~Load_0(C1, SFO, P1) | ~At_1(C1, SFO)"))
-KB.tell(logic.expr("~Load_0(C1, SFO, P2) | ~At_1(C1, SFO)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P1) | ~At_1(C2, JFK)"))
-KB.tell(logic.expr("~Load_0(C2, JFK, P2) | ~At_1(C2, JFK)"))
-
-
-# KB.tell(logic.expr("~Load_1(C1, SFO, P1) | ~At_2(C1, SFO)"))
-# KB.tell(logic.expr("~Load_1(C1, SFO, P2) | ~At_2(C1, SFO)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P1) | ~At_2(C2, JFK)"))
-# KB.tell(logic.expr("~Load_1(C2, JFK, P2) | ~At_2(C2, JFK)"))
-
-#fourth part
-
-KB.tell(logic.expr("At_0(C1, SFO) | ~At_1(C1, SFO)"))
-KB.tell(logic.expr("At_0(C2, SFO) | ~At_1(C2, SFO)"))
-KB.tell(logic.expr("At_0(C1, JFK) | ~At_1(C1, JFK)"))
-KB.tell(logic.expr("At_0(C2, JFK) | ~At_1(C2, JFK)"))
-
-KB.tell(logic.expr("At_0(P1, SFO) | ~At_1(P1, SFO)"))
-KB.tell(logic.expr("At_0(P2, SFO) | ~At_1(P2, SFO)"))
-KB.tell(logic.expr("At_0(P1, JFK) | ~At_1(P1, JFK)"))
-KB.tell(logic.expr("At_0(P2, JFK) | ~At_1(P2, JFK)"))
-
-KB.tell(logic.expr("In_0(C1, P1) | ~In_1(C1, P1) | Load_0(C1, SFO, P1)"))
-KB.tell(logic.expr("In_0(C2, P1) | ~In_1(C2, P1) | Load_0(C2, JFK, P1)"))
-KB.tell(logic.expr("In_0(C1, P2) | ~In_1(C1, P2) | Load_0(C1, SFO, P2)"))
-KB.tell(logic.expr("In_0(C2, P2) | ~In_1(C2, P2) | Load_0(C2, JFK, P2)"))
-
-
-# KB.tell(logic.expr("At_1(C1, SFO) | ~At_2(C1, SFO)"))
-# KB.tell(logic.expr("At_1(C2, SFO) | ~At_2(C2, SFO)"))
-# KB.tell(logic.expr("At_1(C1, JFK) | ~At_2(C1, JFK)"))
-# KB.tell(logic.expr("At_1(C2, JFK) | ~At_2(C2, JFK)"))
-# 
-# KB.tell(logic.expr("At_1(P1, SFO) | ~At_2(P1, SFO)"))
-# KB.tell(logic.expr("At_1(P2, SFO) | ~At_2(P2, SFO)"))
-# KB.tell(logic.expr("At_1(P1, JFK) | ~At_2(P1, JFK)"))
-# KB.tell(logic.expr("At_1(P2, JFK) | ~At_2(P2, JFK)"))
-# 
-# KB.tell(logic.expr("In_1(C1, P1) | ~In_2(C1, P1) | Load_1(C1, SFO, P1)"))
-# KB.tell(logic.expr("In_1(C2, P1) | ~In_2(C2, P1) | Load_1(C2, JFK, P1)"))
-# KB.tell(logic.expr("In_1(C1, P2) | ~In_2(C1, P2) | Load_1(C1, SFO, P2)"))
-# KB.tell(logic.expr("In_1(C2, P2) | ~In_2(C2, P2) | Load_1(C2, JFK, P2)"))
-
-#fifth part
-
-KB.tell(logic.expr("~At_0(C1, SFO) | At_1(C1, SFO) | Load_0(C1, SFO, P1) | Load_0(C1, SFO, P2)"))
-KB.tell(logic.expr("~At_0(C2, SFO) | At_1(C2, SFO)"))
-KB.tell(logic.expr("~At_0(C1, JFK) | At_1(C1, JFK) | Load_0(C1, JFK, P1) | Load_0(C1, JFK, P2)"))
-KB.tell(logic.expr("~At_0(C2, JFK) | At_1(C2, JFK)"))
-
-KB.tell(logic.expr("~At_0(P1, SFO) | At_1(P1, SFO)"))
-KB.tell(logic.expr("~At_0(P2, SFO) | At_1(P2, SFO)"))
-KB.tell(logic.expr("~At_0(P1, JFK) | At_1(P1, JFK)"))
-KB.tell(logic.expr("~At_0(P2, JFK) | At_1(P2, JFK)"))
-
-KB.tell(logic.expr("~In_0(C1, P1) | In_1(C1, P1)"))
-KB.tell(logic.expr("~In_0(C2, P1) | In_1(C2, P1)"))
-KB.tell(logic.expr("~In_0(C1, P2) | In_1(C1, P2)"))
-KB.tell(logic.expr("~In_0(C2, P2) | In_1(C2, P2)"))
-
-
-# KB.tell(logic.expr("~At_1(C1, SFO) | At_2(C1, SFO) | Load_1(C1, SFO, P1) | Load_1(C1, SFO, P2)"))
-# KB.tell(logic.expr("~At_1(C2, SFO) | At_2(C2, SFO)"))
-# KB.tell(logic.expr("~At_1(C1, JFK) | At_2(C1, JFK) | Load_1(C1, JFK, P1) | Load_1(C1, JFK, P2)"))
-# KB.tell(logic.expr("~At_1(C2, JFK) | At_2(C2, JFK)"))
-# 
-# KB.tell(logic.expr("~At_1(P1, SFO) | At_2(P1, SFO)"))
-# KB.tell(logic.expr("~At_1(P2, SFO) | At_2(P2, SFO)"))
-# KB.tell(logic.expr("~At_1(P1, JFK) | At_2(P1, JFK)"))
-# KB.tell(logic.expr("~At_1(P2, JFK) | At_2(P2, JFK)"))
-# 
-# KB.tell(logic.expr("~In_1(C1, P1) | In_2(C1, P1)"))
-# KB.tell(logic.expr("~In_1(C2, P1) | In_2(C2, P1)"))
-# KB.tell(logic.expr("~In_1(C1, P2) | In_2(C1, P2)"))
-# KB.tell(logic.expr("~In_1(C2, P2) | In_2(C2, P2)"))
-
-actions = ["Load_0(C1, SFO, P1)","Load_0(C1, SFO, P2)","Load_0(C2, JFK, P1)","Load_0(C2, JFK, P2)"]
-
-
-actions2 = ["Load_1(C1, SFO, P1)","Load_1(C1, SFO, P2)","Load_1(C2, JFK, P1)","Load_1(C2, JFK, P2)"]
-
-#sixth part
-
-for elem in actions:
-    for elem2 in actions:
-        if elem != elem2:
-            KB.tell(logic.expr("~"+elem+" | ~"+elem2))
-
-
-# for elem in actions2:
-#     for elem2 in actions2:
-#         if elem != elem2:
-#             KB.tell(logic.expr("~"+elem+" | ~"+elem2))
-
-
-#seventh part
-seventh =""
-for elem in actions:
-    seventh = seventh + elem + " | "
+for i in range(0,moves):
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P1) | At_"+str(i)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P1) | At_"+str(i)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P2) | At_"+str(i)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P2) | At_"+str(i)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P1) | At_"+str(i)+"(C1, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P1) | At_"+str(i)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P2) | At_"+str(i)+"(C1, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P2) | At_"+str(i)+"(P2, SFO)"))
+    
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P1) | At_"+str(i)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P1) | At_"+str(i)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P2) | At_"+str(i)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P2) | At_"+str(i)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P1) | At_"+str(i)+"(C2, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P1) | At_"+str(i)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P2) | At_"+str(i)+"(C2, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P2) | At_"+str(i)+"(P2, SFO)"))
     
     
-seventh = seventh[:-3]
-# print(seventh)
-KB.tell(logic.expr(seventh))
+    
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P1) | In_"+str(i)+"(C1, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P1) | At_"+str(i)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P2) | In_"+str(i)+"(C1, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P2) | At_"+str(i)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P1) | In_"+str(i)+"(C1, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P1) | At_"+str(i)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P2) | In_"+str(i)+"(C1, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P2) | At_"+str(i)+"(P2, SFO)"))
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P1) | In_"+str(i)+"(C2, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P1) | At_"+str(i)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P2) | In_"+str(i)+"(C2, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P2) | At_"+str(i)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P1) | In_"+str(i)+"(C2, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P1) | At_"+str(i)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P2) | In_"+str(i)+"(C2, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P2) | At_"+str(i)+"(P2, SFO)"))
+
+
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, JFK, SFO) | At_"+str(i)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, SFO, JFK) | At_"+str(i)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, JFK, SFO) | At_"+str(i)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, SFO, JFK) | At_"+str(i)+"(P2, SFO)"))
+
+
+#second positive effects
+
+for i in range(0, moves):    
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P1) | In_"+str(i+1)+"(C1, P1)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P2) | In_"+str(i+1)+"(C1, P2)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P1) | In_"+str(i+1)+"(C1, P1)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P2) | In_"+str(i+1)+"(C1, P2)"))
+    
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P1) | In_"+str(i+1)+"(C2, P1)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P2) | In_"+str(i+1)+"(C2, P2)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P1) | In_"+str(i+1)+"(C2, P1)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P2) | In_"+str(i+1)+"(C2, P2)"))
+    
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P1) | At_"+str(i+1)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P2) | At_"+str(i+1)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P1) | At_"+str(i+1)+"(C1, SFO)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P2) | At_"+str(i+1)+"(C1, SFO)"))
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P1) | At_"+str(i+1)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P2) | At_"+str(i+1)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P1) | At_"+str(i+1)+"(C2, SFO)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P2) | At_"+str(i+1)+"(C2, SFO)"))
+    
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, JFK, SFO) | At_"+str(i+1)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, SFO, JFK) | At_"+str(i+1)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, JFK, SFO) | At_"+str(i+1)+"(P2, SFO)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, SFO, JFK) | At_"+str(i+1)+"(P2, JFK)"))
+
+#third negative effects
+
+for i in range(0,moves):
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P1) | ~At_"+str(i+1)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, JFK, P2) | ~At_"+str(i+1)+"(C1, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P1) | ~At_"+str(i+1)+"(C1, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C1, SFO, P2) | ~At_"+str(i+1)+"(C1, SFO)"))
+    
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P1) | ~At_"+str(i+1)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, JFK, P2) | ~At_"+str(i+1)+"(C2, JFK)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P1) | ~At_"+str(i+1)+"(C2, SFO)"))
+    KB.tell(logic.expr("~Load_"+str(i)+"(C2, SFO, P2) | ~At_"+str(i+1)+"(C2, SFO)"))
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P1) | ~In_"+str(i+1)+"(C1, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, JFK, P2) | ~In_"+str(i+1)+"(C1, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P1) | ~In_"+str(i+1)+"(C1, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C1, SFO, P2) | ~In_"+str(i+1)+"(C1, P2)"))
+    
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P1) | ~In_"+str(i+1)+"(C2, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, JFK, P2) | ~In_"+str(i+1)+"(C2, P2)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P1) | ~In_"+str(i+1)+"(C2, P1)"))
+    KB.tell(logic.expr("~Unload_"+str(i)+"(C2, SFO, P2) | ~In_"+str(i+1)+"(C2, P2)"))
+
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, JFK, SFO) | ~At_"+str(i+1)+"(P1, JFK)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P1, SFO, JFK) | ~At_"+str(i+1)+"(P1, SFO)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, JFK, SFO) | ~At_"+str(i+1)+"(P2, JFK)"))
+    KB.tell(logic.expr("~Fly_"+str(i)+"(P2, SFO, JFK) | ~At_"+str(i+1)+"(P2, SFO)"))
+    
+
+#fourth from false to true
+
+for i in range(0,moves):
+    KB.tell(logic.expr("At_"+str(i)+"(C1, JFK) | ~At_"+str(i+1)+"(C1, JFK) | Unload_"+str(i)+"(C1, JFK, P1) | Unload_"+str(i)+"(C1, JFK, P2)"))
+    KB.tell(logic.expr("At_"+str(i)+"(C2, JFK) | ~At_"+str(i+1)+"(C2, JFK) | Unload_"+str(i)+"(C2, JFK, P1) | Unload_"+str(i)+"(C2, JFK, P2)"))
+    KB.tell(logic.expr("At_"+str(i)+"(C1, SFO) | ~At_"+str(i+1)+"(C1, SFO) | Unload_"+str(i)+"(C1, SFO, P1) | Unload_"+str(i)+"(C1, SFO, P2)"))
+    KB.tell(logic.expr("At_"+str(i)+"(C2, SFO) | ~At_"+str(i+1)+"(C2, SFO) | Unload_"+str(i)+"(C2, SFO, P1) | Unload_"+str(i)+"(C2, SFO, P2)"))
+    
+    KB.tell(logic.expr("At_"+str(i)+"(P1, JFK) | ~At_"+str(i+1)+"(P1, JFK) | Fly_"+str(i)+"(P1, SFO, JFK)"))
+    KB.tell(logic.expr("At_"+str(i)+"(P2, JFK) | ~At_"+str(i+1)+"(P2, JFK) | Fly_"+str(i)+"(P2, SFO, JFK)"))
+    KB.tell(logic.expr("At_"+str(i)+"(P1, SFO) | ~At_"+str(i+1)+"(P1, SFO) | Fly_"+str(i)+"(P1, JFK, SFO)"))
+    KB.tell(logic.expr("At_"+str(i)+"(P2, SFO) | ~At_"+str(i+1)+"(P2, SFO) | Fly_"+str(i)+"(P2, JFK, SFO)"))
+    
+    
+    
+    KB.tell(logic.expr("In_"+str(i)+"(C1, P1) | ~In_"+str(i+1)+"(C1, P1) | Load_"+str(i)+"(C1, JFK, P1) | Load_"+str(i)+"(C1, SFO, P1)"))
+    KB.tell(logic.expr("In_"+str(i)+"(C1, P2) | ~In_"+str(i+1)+"(C1, P2) | Load_"+str(i)+"(C1, JFK, P2) | Load_"+str(i)+"(C1, SFO, P2)"))
+    KB.tell(logic.expr("In_"+str(i)+"(C2, P1) | ~In_"+str(i+1)+"(C2, P1) | Load_"+str(i)+"(C2, JFK, P1) | Load_"+str(i)+"(C2, SFO, P1)"))
+    KB.tell(logic.expr("In_"+str(i)+"(C2, P2) | ~In_"+str(i+1)+"(C2, P2) | Load_"+str(i)+"(C2, JFK, P2) | Load_"+str(i)+"(C2, SFO, P2)")) 
 
 
 
-# seventh =""
-# for elem in actions2:
-#     seventh = seventh + elem + " | "
-#     
-#     
-# seventh = seventh[:-3]
-# # print(seventh)
-# KB.tell(logic.expr(seventh))
+
+
+
+
+#fifth from true to false
+for i in range(0,moves):
+    KB.tell(logic.expr("~At_"+str(i)+"(C1, SFO) | At_"+str(i+1)+"(C1, SFO) | Load_"+str(i)+"(C1, SFO, P1) | Load_"+str(i)+"(C1, SFO, P2)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(C2, SFO) | At_"+str(i+1)+"(C2, SFO) | Load_"+str(i)+"(C2, SFO, P1) | Load_"+str(i)+"(C2, SFO, P2)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(C1, JFK) | At_"+str(i+1)+"(C1, JFK) | Load_"+str(i)+"(C1, JFK, P1) | Load_"+str(i)+"(C1, JFK, P2)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(C2, JFK) | At_"+str(i+1)+"(C2, JFK) | Load_"+str(i)+"(C2, JFK, P1) | Load_"+str(i)+"(C2, JFK, P2)"))
+    
+    KB.tell(logic.expr("~At_"+str(i)+"(P1, SFO) | At_"+str(i+1)+"(P1, SFO) | Fly_"+str(i)+"(P1, SFO, JFK)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(P2, SFO) | At_"+str(i+1)+"(P2, SFO) | Fly_"+str(i)+"(P2, SFO, JFK)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(P1, JFK) | At_"+str(i+1)+"(P1, JFK) | Fly_"+str(i)+"(P1, JFK, SFO)"))
+    KB.tell(logic.expr("~At_"+str(i)+"(P2, JFK) | At_"+str(i+1)+"(P2, JFK) | Fly_"+str(i)+"(P2, JFK, SFO)"))
+    
+    KB.tell(logic.expr("~In_"+str(i)+"(C1, P1) | In_"+str(i+1)+"(C1, P1) | Unload_"+str(i)+"(C1, JFK, P1) | Unload_"+str(i)+"(C1, SFO, P1)"))
+    KB.tell(logic.expr("~In_"+str(i)+"(C2, P1) | In_"+str(i+1)+"(C2, P1) | Unload_"+str(i)+"(C2, JFK, P1) | Unload_"+str(i)+"(C2, SFO, P1)"))
+    KB.tell(logic.expr("~In_"+str(i)+"(C1, P2) | In_"+str(i+1)+"(C1, P2) | Unload_"+str(i)+"(C1, JFK, P2) | Unload_"+str(i)+"(C1, SFO, P2)"))
+    KB.tell(logic.expr("~In_"+str(i)+"(C2, P2) | In_"+str(i+1)+"(C2, P2) | Unload_"+str(i)+"(C2, JFK, P2) | Unload_"+str(i)+"(C2, SFO, P2)"))
+
+
+
+
+#list of all possible actions
+#actions without timestamp, will be added later
+
+
+actions = ["Load_(C1, JFK, P1)","Load_(C1, JFK, P2)","Load_(C1, SFO, P1)","Load_(C1, SFO, P2)",
+           "Load_(C2, JFK, P1)","Load_(C2, JFK, P2)","Load_(C2, SFO, P1)","Load_(C2, SFO, P2)",
+           "Unload_(C1, JFK, P1)","Unload_(C1, JFK, P2)","Unload_(C1, SFO, P1)","Unload_(C1, SFO, P2)",
+           "Unload_(C2, JFK, P1)","Unload_(C2, JFK, P2)","Unload_(C2, SFO, P1)","Unload_(C2, SFO, P2)",
+           "Fly_(P1, JFK, SFO)","Fly_(P1, SFO, JFK)","Fly_(P2, JFK, SFO)","Fly_(P2, SFO, JFK)"]
+
+
+
+#sixth, only one action can take place
+
+for i in range(0,moves):
+    for elem in itertools.combinations(actions, 2):
+        KB.tell(logic.expr("~"+elem[0].replace("_","_"+str(i))+" | ~"+elem[1].replace("_","_"+str(i))))
+
+
+
+#seventh, one action must take place
+
+for i in range(0,moves):
+    seventh = ""
+    for elem in actions:    
+        seventh += elem.replace("_","_"+str(i)) + " | " 
+    seventh = seventh[:-2]
+    KB.tell(logic.expr(seventh))
+
+
 
 
 
 #goal
-KB.tell(logic.expr("In_1(C1, P1)"))
-# KB.tell(logic.expr("In_2(C2, P2)"))
+# KB.tell(logic.expr("Fly_0(P1, SFO, JFK)"))
+KB.tell(logic.expr("At_6(P1, JFK) & At_6(C1, JFK)"))
+KB.tell(logic.expr("At_6(C2, SFO) & At_6(P2, SFO)"))
 
 
 #some manual cnf
@@ -198,14 +225,20 @@ for elem in KB.clauses:
 string = string[:-2]    
 
 
-# print(string)
+action_stubs = ["Load", "Unload", "Fly"]
+
+
 
 #print only true values
-# answer = logic.dpll_satisfiable(string)
-# if answer != False: 
-#     for elem in answer:
-#         if answer[elem]:
-#             print(str(elem)+ " : " +str(answer[elem]))
-# else:
-#     print(answer)
-print(logic.dpll_satisfiable(string))
+answer = logic.dpll_satisfiable(logic.expr(string))
+
+
+#print out only true actions, leave out facts
+if answer != False: 
+    for elem in answer:
+        if answer[elem]:
+            if any(sub in str(elem) for sub in action_stubs):
+                print(str(elem)+ " : " +str(answer[elem]))
+else:
+    print(answer)
+# print(logic.dpll_satisfiable(logic.expr(string)))

@@ -25,8 +25,11 @@ And a few other functions:
 """
 
 import itertools, re
-#import agents
+# import agents
 from utils import *
+import sys
+sys.setrecursionlimit(10000)
+
 
 #______________________________________________________________________________
 
@@ -645,39 +648,25 @@ def dpll_satisfiable(s):
     """
     clauses = conjuncts(to_cnf(s))
     symbols = prop_symbols(s)
-#     print(clauses)
-#     print(symbols)
     return dpll(clauses, symbols, {})
 
 def dpll(clauses, symbols, model):
     "See if the clauses are true in a partial model."
     unknown_clauses = [] ## clauses with an unknown truth value
-    print("clauses: "+str(clauses))
-    print("model: "+str(model))
-#     print("symbols: "+str(symbols))
     for c in clauses:
         val =  pl_true(c, model)
         if val == False:
             return False
         if val != True:
             unknown_clauses.append(c)
-            
-    print("unknown: "+str(unknown_clauses))      
     if not unknown_clauses:
-        print("no unknown elements")
         return model
     P, value = find_pure_symbol(symbols, unknown_clauses)
     if P:
-        print("found something pure")
         return dpll(clauses, removeall(P, symbols), extend(model, P, value))
     P, value = find_unit_clause(clauses, model)
     if P:
-#         print(model)
-#         print(P, value)
-        print("founded forced value")
-#         print("adding "+str(P)+" to model with : "+str(value))
         return dpll(clauses, removeall(P, symbols), extend(model, P, value))
-    print("didnt do any above")
     P, symbols = symbols[0], symbols[1:]
     return (dpll(clauses, symbols, extend(model, P, True)) or
             dpll(clauses, symbols, extend(model, P, False)))
@@ -703,7 +692,6 @@ def find_unit_clause(clauses, model):
     (B, False)
     """
     for clause in clauses:
-#         print("calling for: "+str(clause))
         P, value = unit_clause_assign(clause, model)
         if P: return P, value
     return None, None
@@ -725,11 +713,9 @@ def unit_clause_assign(clause, model):
             if model[sym] == positive:
                 return None, None  # clause already True
         elif P:
-#             print("couldnt find force")
             return None, None      # more than 1 unbound variable
         else:
             P, value = sym, positive
-    print(P, value)
     return P, value
 
 def inspect_literal(literal):
