@@ -166,8 +166,6 @@ KB.tell(logic.expr("Remove_1(Spare, Trunk) | Remove_1(Flat, Axle)"))
 
 # KB.tell(logic.expr("At_2(Flat, Ground) & At_2(Spare, Ground)"))
 
-KB.tell(logic.expr("PutOn_2(Spare, Axle)"))   
-
 
 KB.tell(logic.expr("At_3(Spare, Axle)"))   
 
@@ -197,6 +195,6 @@ string = string[:-2]
 #         print(str(elem)+ " : " +str(answer[elem]))
 # else:
 #     print(answer)
-print(logic.dpll_satisfiable(string))
+print(logic.dpll_satisfiable(logic.expr(string)))
 
 

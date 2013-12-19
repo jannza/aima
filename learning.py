@@ -575,6 +575,7 @@ iris = DataSet(name="iris", target="class",
 # The Restaurant example from Fig. 18.2
 
 def RestaurantDataSet(examples=None):
+    print(examples)
     "Build a DataSet of Restaurant waiting examples. [Fig. 18.3]"
     return DataSet(name='restaurant', target='Wait', examples=examples,
                    attrnames='Alternate Bar Fri/Sat Hungry Patrons Price '

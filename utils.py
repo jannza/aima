@@ -674,7 +674,8 @@ def AIMAFile(components, mode='r'):
 
 def DataFile(name, mode='r'):
     "Return a file in the AIMA /data directory."
-    return AIMAFile(['..', 'data', name], mode)
+#     return AIMAFile(['..', 'data', name], mode)
+    return AIMAFile(['', 'data', name], mode)
 
 def unimplemented():
     "Use this as a stub for not-yet-implemented functions."
